@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>JS Drum Kit</title>
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
 
@@ -57,10 +59,45 @@
   <audio data-key="75" src="sounds/tom.wav"></audio>
   <audio data-key="76" src="sounds/tink.wav"></audio>
 
-<script>
+  <script>
+    document.addEventListener('keydown', (event) => {
+      const key = event.key || event.keyCode;
+      const charToDataKey = {
+        a: 65,
+        s: 83,
+        d: 68,
+        f: 70,
+        g: 71,
+        h: 72,
+        j: 74,
+        k: 75,
+        l: 76
+      }
 
-</script>
+      toggleToPlayed(charToDataKey[key]);
+    });
+
+    function toggleToPlayed(dataKey) {
+      if (!dataKey) return;
+
+      const keyNode = document.querySelector(`.key[data-key="${dataKey}"]`);
+      keyNode.classList.add('playing');
+      const keySound = document.querySelector(`audio[data-key="${dataKey}"]`);
+      keySound.currentTime = 0;
+      keySound.play();
+    }
+
+    const keys = document.querySelectorAll('.key');
+    keys.forEach(key => key.addEventListener('transitionend', removeTransition));
+
+    function removeTransition(event) {
+      if (event.propertyName !== 'transform') return;
+      this.classList.remove('playing');
+    }
+
+  </script>
 
 
 </body>
+
 </html>
